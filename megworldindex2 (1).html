@@ -1,0 +1,1210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEG WORLD — Build Beyond Borders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0F1A;
+    --panel:#121828;
+    --panel-2:#171f33;
+    --line: rgba(255,255,255,0.08);
+    --lime:#f7b9f7;
+    --coral:#FF6B5B;
+    --sky:#5BD1FF;
+    --paper:#EDEFF4;
+    --muted:#8E97AD;
+    --radius: 18px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4, .display{
+    font-family:'Space Grotesk', sans-serif;
+    letter-spacing:-0.02em;
+  }
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  ::selection{background:var(--lime); color:var(--ink);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  .wrap{max-width:1200px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- header ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    background:rgba(11,15,26,0.72);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    transition:padding .3s ease;
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:1200px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-weight:700; font-size:1.3rem;
+  }
+  .logo .dot{
+    width:12px; height:12px; border-radius:50%;
+    background:var(--lime);
+    box-shadow:0 0 14px var(--lime);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{transform:scale(1); opacity:1;}
+    50%{transform:scale(1.4); opacity:.6;}
+  }
+  nav ul{display:flex; gap:30px;}
+  nav a{
+    font-size:0.92rem; font-weight:600; color:var(--muted);
+    position:relative; padding:4px 0;
+    transition:color .25s ease;
+  }
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:-2px;
+    width:0; height:2px; background:var(--lime);
+    transition:width .25s ease;
+  }
+  nav a:hover{color:var(--paper);}
+  nav a:hover::after{width:100%;}
+
+  /* services dropdown */
+  .nav-item{position:relative;}
+  .nav-item > a{display:flex; align-items:center; gap:6px;}
+  .nav-caret{
+    width:9px; height:9px; border-right:2px solid currentColor; border-bottom:2px solid currentColor;
+    transform:rotate(45deg); transition:transform .25s ease; margin-top:-3px;
+  }
+  .nav-item.open .nav-caret{ transform:rotate(-135deg); margin-top:2px; }
+  .nav-dropdown{
+    position:absolute; top:calc(100% + 18px); left:50%; transform:translateX(-50%) translateY(6px);
+    min-width:230px; background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:10px; box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    opacity:0; pointer-events:none; transition:opacity .22s ease, transform .22s ease;
+    z-index:1100;
+  }
+  .nav-item.open .nav-dropdown{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+  .nav-dropdown a{
+    display:block; padding:11px 14px; border-radius:9px; font-size:0.9rem; font-weight:600;
+    color:var(--paper);
+  }
+  .nav-dropdown a::after{ display:none; }
+  .nav-dropdown a:hover{ background:rgba(198,255,61,0.1); color:var(--lime); }
+  .nav-dropdown .nd-divider{ height:1px; background:var(--line); margin:6px 4px; }
+
+  .head-actions{display:flex; align-items:center; gap:14px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 22px; border-radius:100px;
+    font-weight:700; font-size:0.88rem; cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:var(--lime); color:var(--ink);
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(198,255,61,0.25);}
+  .btn-outline{
+    border-color:var(--line); color:var(--paper);
+  }
+  .btn-outline:hover{border-color:var(--lime); color:var(--lime); transform:translateY(-2px);}
+  .burger{display:none; flex-direction:column; gap:5px; cursor:pointer;}
+  .burger span{width:26px; height:2px; background:var(--paper);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding:140px 0 80px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:50px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:0.8rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--lime); margin-bottom:22px;
+    opacity:0; animation:fadeUp .8s ease forwards; animation-delay:.1s;
+  }
+  .eyebrow::before{content:''; width:26px; height:1px; background:var(--lime);}
+  .hero h1{
+    font-size:clamp(2.6rem, 5.4vw, 4.6rem);
+    line-height:1.02;
+    font-weight:700;
+    opacity:0; animation:fadeUp .9s ease forwards; animation-delay:.25s;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--lime);
+    position:relative;
+  }
+  .hero p.lead{
+    margin-top:24px; max-width:520px; color:var(--muted); font-size:1.08rem; line-height:1.7;
+    opacity:0; animation:fadeUp .9s ease forwards; animation-delay:.4s;
+  }
+  .hero-cta{
+    margin-top:36px; display:flex; gap:16px; flex-wrap:wrap;
+    opacity:0; animation:fadeUp .9s ease forwards; animation-delay:.55s;
+  }
+  .hero-stats{
+    display:flex; gap:38px; margin-top:56px;
+    opacity:0; animation:fadeUp .9s ease forwards; animation-delay:.7s;
+  }
+  .hero-stats div strong{display:block; font-family:'Space Grotesk'; font-size:1.7rem; color:var(--paper);}
+  .hero-stats div span{font-size:0.8rem; color:var(--muted);}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(22px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* orbit / globe signature */
+  .orbit-stage{
+    position:relative; height:520px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .globe-core{
+    width:180px; height:180px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #2a3a63, #0c1120 70%);
+    box-shadow:0 0 80px rgba(91,209,255,0.25), inset -20px -20px 60px rgba(0,0,0,0.5);
+    position:relative;
+    animation:spin 30s linear infinite;
+  }
+  .globe-core::before, .globe-core::after{
+    content:''; position:absolute; inset:0; border-radius:50%;
+    border:1px solid rgba(198,255,61,0.18);
+  }
+  .globe-core::before{ transform:rotateX(75deg); }
+  .globe-core::after{ transform:rotateX(75deg) rotate(60deg); }
+  @keyframes spin{ from{transform:rotate(0);} to{transform:rotate(360deg);} }
+
+  .orbit{
+    position:absolute; border:1px dashed rgba(255,255,255,0.14); border-radius:50%;
+  }
+  .orbit-1{width:300px; height:300px; animation:spin 18s linear infinite;}
+  .orbit-2{width:400px; height:400px; animation:spin 26s linear infinite reverse;}
+  .orbit-3{width:500px; height:500px; animation:spin 34s linear infinite;}
+  .orbit-node{
+    position:absolute; top:-18px; left:50%; transform:translateX(-50%);
+    width:52px; height:52px; border-radius:14px;
+    background:var(--panel-2); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+    box-shadow:0 10px 24px rgba(0,0,0,0.4);
+  }
+
+  /* ---------- section basics ---------- */
+  section{padding:120px 0;}
+  .section-head{max-width:640px; margin-bottom:64px;}
+  .section-head .eyebrow{animation:none; opacity:1;}
+  .section-head h2{font-size:clamp(2rem, 3.6vw, 3rem); font-weight:700;}
+  .section-head p{color:var(--muted); margin-top:16px; font-size:1.05rem; line-height:1.7;}
+
+  .reveal{opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:center;}
+  .about-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:32px; position:relative; overflow:hidden;
+  }
+  .about-card h3{font-size:1.8rem; margin-bottom:14px;}
+  .about-list{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:30px;}
+  .about-list li{
+    padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel-2);
+  }
+  .about-list li strong{display:block; font-family:'Space Grotesk'; font-size:1.6rem; color:var(--lime);}
+  .about-list li span{font-size:0.85rem; color:var(--muted);}
+
+  /* ---------- services ---------- */
+  .services-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;
+  }
+  .service-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:0 0 32px; position:relative; overflow:hidden; cursor:pointer;
+    transition:transform .35s ease, border-color .35s ease, background .35s ease;
+  }
+  .service-card .service-body{ padding:0 32px; }
+  .service-image{
+    width:100%; height:170px; overflow:hidden; position:relative;
+  }
+  .service-image img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .5s ease;
+  }
+  .service-card:hover .service-image img{ transform:scale(1.08); }
+  .service-image::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(11,15,26,0) 40%, var(--panel) 100%);
+  }
+  .service-card:hover, .service-card:focus-visible{
+    transform:translateY(-8px);
+    border-color:rgba(198,255,61,0.4);
+    background:var(--panel-2);
+    outline:none;
+  }
+  .service-num{
+    font-family:'Space Grotesk'; font-size:0.8rem; color:var(--muted);
+    letter-spacing:0.1em;
+  }
+  .service-icon{
+    width:52px; height:52px; border-radius:14px;
+    background:rgba(198,255,61,0.1); color:var(--lime);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem; margin:-46px 0 20px; position:relative; z-index:2;
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+    transition:transform .35s ease, background .35s ease;
+  }
+  .service-card:hover .service-icon{ transform:rotate(-8deg) scale(1.08); background:var(--lime); color:var(--ink); }
+  .service-card h3{font-size:1.25rem; margin-bottom:10px;}
+  .service-card p{color:var(--muted); font-size:0.95rem; line-height:1.6;}
+  .service-more{
+    display:inline-block; margin-top:16px; font-size:0.85rem; font-weight:700;
+    color:var(--lime); letter-spacing:0.02em;
+  }
+
+  /* ---------- service modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:2000;
+    background:rgba(6,8,14,0.72); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .modal-overlay.active{ opacity:1; pointer-events:auto; }
+  .modal-box{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    max-width:560px; width:100%; padding:36px;
+    position:relative; max-height:86vh; overflow-y:auto;
+    transform:translateY(24px) scale(0.97); opacity:0;
+    transition:transform .35s ease, opacity .35s ease;
+  }
+  .modal-overlay.active .modal-box{ transform:translateY(0) scale(1); opacity:1; }
+  .modal-close{
+    position:absolute; top:20px; right:20px;
+    width:36px; height:36px; border-radius:50%;
+    background:var(--panel-2); border:1px solid var(--line);
+    color:var(--paper); font-size:1.1rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .25s ease, transform .25s ease;
+  }
+  .modal-close:hover{ background:var(--coral); color:var(--ink); transform:rotate(90deg); }
+  .modal-box .service-icon{ margin:0 0 18px; }
+  .modal-box h3{font-size:1.5rem; margin-bottom:6px;}
+  .modal-box .service-num{display:block; margin-bottom:14px;}
+  .modal-box p.modal-desc{color:var(--muted); font-size:1rem; line-height:1.7; margin-bottom:20px;}
+  .modal-box .modal-list{margin-bottom:26px;}
+  .modal-box .modal-list li{
+    display:flex; align-items:flex-start; gap:10px; margin-bottom:10px;
+    color:var(--paper); font-size:0.92rem; line-height:1.5;
+  }
+  .modal-box .modal-list li::before{
+    content:'✓'; color:var(--lime); font-weight:700; flex-shrink:0;
+  }
+  .modal-actions{display:flex; gap:12px; flex-wrap:wrap;}
+
+  /* enquiry popup form */
+  .modal-box.enquiry-box{max-width:600px;}
+  .modal-box .eyebrow{margin-bottom:8px;}
+  .modal-box .enquiry-sub{color:var(--muted); font-size:0.92rem; margin-bottom:24px;}
+  .modal-box form{display:flex; flex-direction:column; gap:16px;}
+  .modal-box .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .modal-box input, .modal-box textarea, .modal-box select{width:100%;}
+  .modal-box .form-success{
+    display:none; align-items:center; gap:10px;
+    background:rgba(198,255,61,0.1); border:1px solid var(--lime); color:var(--lime);
+    padding:12px 16px; border-radius:12px; font-size:0.9rem; font-weight:600; margin-top:4px;
+  }
+  .modal-box .form-success.show{display:flex;}
+  @media (max-width:560px){
+    .modal-box .form-row{grid-template-columns:1fr;}
+  }
+
+  /* whatsapp floating button */
+  .whatsapp-float{
+    position:fixed; right:24px; bottom:24px; z-index:1500;
+    width:60px; height:60px; border-radius:50%;
+    background:#25D366; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 30px rgba(37,211,102,0.45);
+    transition:transform .25s ease, box-shadow .25s ease;
+    animation:wa-pulse 2.6s ease-in-out infinite;
+  }
+  .whatsapp-float:hover{ transform:scale(1.08); box-shadow:0 14px 36px rgba(37,211,102,0.6); }
+  .whatsapp-float svg{ width:32px; height:32px; }
+  @keyframes wa-pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(37,211,102,0.5), 0 10px 30px rgba(37,211,102,0.45); }
+    50%{ box-shadow:0 0 0 12px rgba(37,211,102,0), 0 10px 30px rgba(37,211,102,0.45); }
+  }
+  @media (max-width:600px){
+    .whatsapp-float{ right:16px; bottom:16px; width:54px; height:54px; }
+    .whatsapp-float svg{ width:28px; height:28px; }
+  }
+
+  /* price alignment fix */
+  .price-tag{
+    display:flex; align-items:baseline; gap:4px; flex-wrap:wrap;
+    font-family:'Manrope', sans-serif; font-weight:800; font-size:1.9rem; margin-top:16px;
+  }
+  .price-tag .rupee{ font-family:'Manrope', sans-serif; font-weight:800; }
+  .price-tag .price-suffix{ font-size:0.9rem; color:var(--muted); font-weight:500; }
+
+  /* ---------- portfolio ---------- */
+  .portfolio-tabs{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:36px;}
+  .tab-btn{
+    padding:9px 20px; border-radius:100px; border:1px solid var(--line);
+    color:var(--muted); font-size:0.85rem; font-weight:700; cursor:pointer; background:transparent;
+    transition:all .25s ease;
+  }
+  .tab-btn.active, .tab-btn:hover{background:var(--lime); color:var(--ink); border-color:var(--lime);}
+  .portfolio-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+  }
+  .p-card{
+    border-radius:var(--radius); overflow:hidden; position:relative;
+    border:1px solid var(--line); background:var(--panel);
+    aspect-ratio:4/3;
+  }
+  .p-card .p-bg{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:3rem;
+    transition:transform .5s ease;
+  }
+  .p-card .p-bg img{
+    width:100%; height:100%; object-fit:cover;
+  }
+  .p-card:hover .p-bg{transform:scale(1.1) rotate(3deg);}
+  .p-card .p-overlay{
+    position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
+    padding:22px; background:linear-gradient(180deg, rgba(11,15,26,0) 40%, rgba(11,15,26,0.92) 100%);
+  }
+  .p-card .p-tag{font-size:0.72rem; color:var(--lime); font-weight:700; letter-spacing:0.08em; text-transform:uppercase;}
+  .p-card .p-title{font-family:'Space Grotesk'; font-size:1.15rem; margin-top:6px;}
+  .p-card .p-access{
+    position:absolute; top:16px; right:16px; z-index:2;
+    width:38px; height:38px; border-radius:50%;
+    background:rgba(11,15,26,0.6); backdrop-filter:blur(6px);
+    border:1px solid var(--line); color:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; text-decoration:none; cursor:pointer;
+    opacity:0; transform:translateY(-6px);
+    transition:opacity .3s ease, transform .3s ease, background .3s ease, border-color .3s ease;
+  }
+  .p-card:hover .p-access{ opacity:1; transform:translateY(0); }
+  .p-card .p-access:hover{ background:var(--lime); color:var(--ink); border-color:var(--lime); }
+
+  /* backgrounds per portfolio card */
+  .bg-1{background:linear-gradient(135deg,#1c2b4d,#0b0f1a);}
+  .bg-2{background:linear-gradient(135deg,#33203a,#0b0f1a);}
+  .bg-3{background:linear-gradient(135deg,#1c3d33,#0b0f1a);}
+  .bg-4{background:linear-gradient(135deg,#3a2a1c,#0b0f1a);}
+  .bg-5{background:linear-gradient(135deg,#1c2d3d,#0b0f1a);}
+  .bg-6{background:linear-gradient(135deg,#2b1c3d,#0b0f1a);}
+
+  /* ---------- testimonials ---------- */
+  .test-track{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  }
+  .test-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:30px;
+  }
+  .test-card .stars{color:var(--lime); letter-spacing:3px; margin-bottom:16px;}
+  .test-card p{color:var(--paper); font-size:0.98rem; line-height:1.7; opacity:.9;}
+  .test-person{display:flex; align-items:center; gap:12px; margin-top:22px;}
+  .avatar{
+    width:44px; height:44px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-family:'Space Grotesk';
+    background:var(--lime); color:var(--ink);
+  }
+  .test-person strong{display:block; font-size:0.92rem;}
+  .test-person span{font-size:0.78rem; color:var(--muted);}
+
+  /* ---------- blog ---------- */
+  .blog-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .blog-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; transition:transform .35s ease;
+  }
+  .blog-card:hover{transform:translateY(-6px);}
+  .blog-thumb{
+    height:170px; display:flex; align-items:center; justify-content:center; font-size:2.2rem;
+  }
+  .blog-body{padding:24px;}
+  .blog-date{font-size:0.75rem; color:var(--lime); font-weight:700; letter-spacing:0.06em; text-transform:uppercase;}
+  .blog-body h3{font-size:1.15rem; margin:10px 0 12px; line-height:1.4;}
+  .blog-body p{color:var(--muted); font-size:0.9rem; line-height:1.6;}
+  .blog-link{display:inline-block; margin-top:16px; font-size:0.85rem; font-weight:700; color:var(--sky);}
+
+  /* ---------- faq ---------- */
+  .faq-list{max-width:800px; margin:0 auto;}
+  .faq-item{
+    border-bottom:1px solid var(--line); padding:22px 0; cursor:pointer;
+  }
+  .faq-q{display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:1.05rem;}
+  .faq-q .plus{transition:transform .3s ease; color:var(--lime); font-size:1.4rem;}
+  .faq-item.open .plus{transform:rotate(135deg);}
+  .faq-a{
+    max-height:0; overflow:hidden; transition:max-height .35s ease, padding .35s ease;
+    color:var(--muted); font-size:0.95rem; line-height:1.7;
+  }
+  .faq-item.open .faq-a{max-height:220px; padding-top:14px;}
+
+  /* ---------- contact ---------- */
+  .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:50px;}
+  .contact-info-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:32px;
+  }
+  .contact-info-card .row{display:flex; gap:14px; align-items:flex-start; margin-bottom:24px;}
+  .contact-info-card .row .ic{
+    width:42px; height:42px; border-radius:12px; background:rgba(198,255,61,0.1); color:var(--lime);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .contact-info-card .row strong{display:block; font-size:0.95rem;}
+  .contact-info-card .row span{color:var(--muted); font-size:0.88rem;}
+
+  form{display:grid; gap:18px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  input, textarea, select{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; color:var(--paper); font-family:'Manrope'; font-size:0.95rem;
+    transition:border-color .25s ease;
+  }
+  input:focus, textarea:focus, select:focus{outline:none; border-color:var(--lime);}
+  textarea{resize:vertical; min-height:120px;}
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line); padding:60px 0 30px;
+  }
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px;}
+  .footer-grid h4{font-size:0.95rem; margin-bottom:18px;}
+  .footer-grid ul li{margin-bottom:10px;}
+  .footer-grid ul li a{color:var(--muted); font-size:0.9rem; transition:color .25s ease;}
+  .footer-grid ul li a:hover{color:var(--lime);}
+  .footer-bottom{
+    margin-top:50px; padding-top:24px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    color:var(--muted); font-size:0.82rem;
+  }
+
+  /* ---------- responsive ---------- */
+  @media(max-width:980px){
+    nav{display:none;}
+    .burger{display:flex;}
+    .hero-grid{grid-template-columns:1fr;}
+    .orbit-stage{height:340px; margin-top:20px;}
+    .about-grid, .contact-grid{grid-template-columns:1fr;}
+    .services-grid, .portfolio-grid, .test-track, .blog-grid{grid-template-columns:repeat(2,1fr);}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:620px){
+    .form-row{grid-template-columns:1fr;}
+    .services-grid, .portfolio-grid, .test-track, .blog-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+    .hero-stats{flex-wrap:wrap; gap:24px;}
+    .head-actions .btn-outline span.txt{display:none;}
+  }
+
+  /* mobile nav drawer */
+  .mobile-nav{
+    position:fixed; top:0; right:-100%; width:78%; max-width:320px; height:100vh;
+    background:var(--panel); border-left:1px solid var(--line);
+    z-index:1100; transition:right .35s ease; padding:100px 30px 30px;
+  }
+  .mobile-nav.open{right:0;}
+  .mobile-nav ul li{margin-bottom:22px;}
+  .mobile-nav ul li a{font-size:1.1rem; font-weight:700;}
+  .mnav-close{position:absolute; top:30px; right:30px; font-size:1.6rem; cursor:pointer;}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="nav-row">
+    <a href="#home" class="logo"><span class="dot"></span>MEG<span style="color:var(--lime)">WORLD</span></a>
+    <nav>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li class="nav-item" id="servicesNavItem">
+          <a href="#services" id="servicesNavLink"><span>Services</span><span class="nav-caret"></span></a>
+          <div class="nav-dropdown" id="servicesDropdown">
+            <a href="#services" onclick="openServiceModal('web')">🌐 Website Development</a>
+            <a href="#services" onclick="openServiceModal('mobile')">📱 Mobile App Development</a>
+            <a href="#services" onclick="openServiceModal('software')">🖥️ Software Development</a>
+            <a href="#services" onclick="openServiceModal('marketing')">📈 Digital Marketing</a>
+            <a href="#services" onclick="openServiceModal('design')">🎨 Graphic Design</a>
+            <a href="#services" onclick="openServiceModal('video')">🎬 Videography</a>
+            <div class="nd-divider"></div>
+            <a href="#services">View all services →</a>
+          </div>
+        </li>
+        <li><a href="#packages">Packages</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="head-actions">
+      <a href="#contact" class="btn btn-primary" onclick="return openEnquiryModal(event)">Enquire Now</a>
+      <div class="burger" id="burger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mnav-close" id="mnavClose">✕</div>
+  <ul>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Digital Studio · Est. Worldwide</div>
+      <h1>We build the digital <em>world</em><br>your brand deserves.</h1>
+      <p class="lead">MEG WORLD is a full-stack digital agency crafting websites, apps, software, and brands for companies ready to grow beyond borders. One team, every discipline, zero guesswork.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary" onclick="return openEnquiryModal(event)">Enquire Now →</a>
+        <a href="#portfolio" class="btn btn-outline">See Our Work</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>180+</strong><span>Projects Delivered</span></div>
+        <div><strong>60+</strong><span>Happy Clients</span></div>
+        <div><strong>12</strong><span>Countries Served</span></div>
+        <div><strong>6</strong><span>Core Services</span></div>
+      </div>
+    </div>
+    <div class="orbit-stage">
+      <div class="orbit orbit-3"><div class="orbit-node" style="background:var(--panel-2)">🎬</div></div>
+      <div class="orbit orbit-2"><div class="orbit-node">📱</div></div>
+      <div class="orbit orbit-1"><div class="orbit-node">💻</div></div>
+      <div class="globe-core"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div>
+        <div class="eyebrow" style="opacity:1">Who We Are</div>
+        <h2 style="font-size:2.4rem; font-weight:700; margin-top:10px;">A world-class team, built to move fast.</h2>
+      </div>
+      <div class="about-card">
+        <h3>Design, code, and strategy — under one roof.</h3>
+        <p style="color:var(--muted); line-height:1.7;">Founded by builders who got tired of stitching together five different agencies for one product, MEG WORLD brings web, mobile, software, marketing, design, and video into a single accountable team. We plan in weeks, not quarters, and we ship things that actually work.</p>
+        <div class="about-list">
+          <li><strong>2016</strong><span>Founded</span></li>
+          <li><strong>40+</strong><span>Specialists</span></li>
+          <li><strong>98%</strong><span>Client Retention</span></li>
+          <li><strong>24/7</strong><span>Support Desk</span></li>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">What We Do</div>
+      <h2>Six disciplines. One team.</h2>
+      <p>From the first line of code to the final cut of a launch video, we cover every piece of your digital presence.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal" tabindex="0" role="button" onclick="openServiceModal('web')">
+        <div class="service-image"><img src="https://loremflickr.com/500/300/webdesign,code" alt="Website development"></div>
+        <div class="service-body">
+          <div class="service-num">01 / Build</div>
+          <div class="service-icon">🌐</div>
+          <h3>Website Development</h3>
+          <p>Fast, responsive, SEO-ready websites — from landing pages to full e-commerce platforms — built on modern frameworks.</p>
+          <span class="service-more">Learn more →</span>
+        </div>
+      </div>
+      <div class="service-card reveal" tabindex="0" role="button" onclick="openServiceModal('mobile')">
+        <div class="service-image"><img src="https://loremflickr.com/500/300/mobileapp,smartphone" alt="Mobile app development"></div>
+        <div class="service-body">
+          <div class="service-num">02 / Build</div>
+          <div class="service-icon">📱</div>
+          <h3>Mobile App Development</h3>
+          <p>Native and cross-platform iOS & Android apps designed for smooth performance and real user retention.</p>
+          <span class="service-more">Learn more →</span>
+        </div>
+      </div>
+      <div class="service-card reveal" tabindex="0" role="button" onclick="openServiceModal('software')">
+        <div class="service-image"><img src="https://loremflickr.com/500/300/software,programming" alt="Software development"></div>
+        <div class="service-body">
+          <div class="service-num">03 / Build</div>
+          <div class="service-icon">🖥️</div>
+          <h3>Software Development</h3>
+          <p>Custom software, internal tools, and SaaS products engineered to solve your exact business problem.</p>
+          <span class="service-more">Learn more →</span>
+        </div>
+      </div>
+      <div class="service-card reveal" tabindex="0" role="button" onclick="openServiceModal('marketing')">
+        <div class="service-image"><img src="https://loremflickr.com/500/300/digitalmarketing,analytics" alt="Digital marketing"></div>
+        <div class="service-body">
+          <div class="service-num">04 / Grow</div>
+          <div class="service-icon">📈</div>
+          <h3>Digital Marketing</h3>
+          <p>SEO, paid media, and content strategy that turns traffic into pipeline and pipeline into revenue.</p>
+          <span class="service-more">Learn more →</span>
+        </div>
+      </div>
+      <div class="service-card reveal" tabindex="0" role="button" onclick="openServiceModal('design')">
+        <div class="service-image"><img src="https://loremflickr.com/500/300/graphicdesign,branding" alt="Graphic design"></div>
+        <div class="service-body">
+          <div class="service-num">05 / Brand</div>
+          <div class="service-icon">🎨</div>
+          <h3>Graphic Design</h3>
+          <p>Logos, brand systems, and visual identities that make your business instantly recognizable.</p>
+          <span class="service-more">Learn more →</span>
+        </div>
+      </div>
+      <div class="service-card reveal" tabindex="0" role="button" onclick="openServiceModal('video')">
+        <div class="service-image"><img src="https://loremflickr.com/500/300/videography,filmmaking" alt="Videography"></div>
+        <div class="service-body">
+          <div class="service-num">06 / Brand</div>
+          <div class="service-icon">🎬</div>
+          <h3>Videography</h3>
+          <p>Product films, brand stories, and social-ready video content shot, edited, and delivered end to end.</p>
+          <span class="service-more">Learn more →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE DETAIL MODAL -->
+<div class="modal-overlay" id="serviceModal" onclick="if(event.target===this) closeServiceModal()">
+  <div class="modal-box">
+    <button class="modal-close" aria-label="Close" onclick="closeServiceModal()">✕</button>
+    <div class="service-icon" id="modalIcon">🌐</div>
+    <div class="service-num" id="modalNum">01 / Build</div>
+    <h3 id="modalTitle">Website Development</h3>
+    <p class="modal-desc" id="modalDesc"></p>
+    <ul class="modal-list" id="modalList"></ul>
+    <div class="modal-actions">
+      <a href="#contact" class="btn btn-primary" id="modalEnquire" onclick="closeServiceModal(); return openEnquiryModal(event, this.getAttribute('data-service'))">Enquire about this →</a>
+      <button class="btn btn-outline" onclick="closeServiceModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Pricing</div>
+      <h2>Packages that scale with you.</h2>
+      <p>Straightforward pricing tiers. Every package can be customised — enquire for a tailored quote.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">STARTER</div>
+        <div class="price-tag"><span class="rupee">₹25,000</span><span class="price-suffix">onwards</span></div>
+        <p style="margin-top:14px;">Ideal for new businesses — a single service (website, branding, or app MVP) done right.</p>
+        <ul style="margin-top:20px; color:var(--muted); font-size:0.9rem; line-height:2;">
+          <li>✓ 1 core service</li>
+          <li>✓ 2 revision rounds</li>
+          <li>✓ 2-week delivery</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" style="margin-top:22px; width:100%; justify-content:center;" onclick="return openEnquiryModal(event,'Starter Package')">Enquire</a>
+      </div>
+      <div class="service-card reveal" style="border-color:var(--lime); background:var(--panel-2);">
+        <div class="service-num" style="color:var(--lime);">GROWTH — Popular</div>
+        <div class="price-tag"><span class="rupee">₹75,000</span><span class="price-suffix">onwards</span></div>
+        <p style="margin-top:14px;">For growing brands — combine web/app development with marketing and design.</p>
+        <ul style="margin-top:20px; color:var(--muted); font-size:0.9rem; line-height:2;">
+          <li>✓ Up to 3 services</li>
+          <li>✓ Unlimited revisions</li>
+          <li>✓ Dedicated manager</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary" style="margin-top:22px; width:100%; justify-content:center;" onclick="return openEnquiryModal(event,'Growth Package')">Enquire</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">ENTERPRISE</div>
+        <div class="price-tag">Custom Quote</div>
+        <p style="margin-top:14px;">Full-scale digital transformation across web, software, marketing, and content.</p>
+        <ul style="margin-top:20px; color:var(--muted); font-size:0.9rem; line-height:2;">
+          <li>✓ All 6 services</li>
+          <li>✓ Priority 24/7 support</li>
+          <li>✓ Custom SLAs</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" style="margin-top:22px; width:100%; justify-content:center;" onclick="return openEnquiryModal(event,'Enterprise Package')">Enquire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our Work</div>
+      <h2>Selected projects from around the world.</h2>
+      <p>A sample of what we've shipped across web, app, and brand work.</p>
+    </div>
+    <div class="portfolio-tabs reveal">
+      <button class="tab-btn active" data-filter="all">All</button>
+      <button class="tab-btn" data-filter="web">Web</button>
+      <button class="tab-btn" data-filter="app">App</button>
+      <button class="tab-btn" data-filter="brand">Brand</button>
+      <button class="tab-btn" data-filter="video">Video</button>
+    </div>
+    <div class="portfolio-grid" id="portfolioGrid">
+      <div class="p-card reveal" data-cat="web" onclick="openProjectModal('p1')"><div class="p-bg bg-1"><img src="https://loremflickr.com/500/400/fashion,ecommerce" alt="Aurelio Fashion e-commerce site"></div><a class="p-access" onclick="event.stopPropagation(); openProjectModal('p1')" aria-label="View project">↗</a><div class="p-overlay"><div class="p-tag">Website</div><div class="p-title">Aurelio Fashion — E-commerce</div></div></div>
+      <div class="p-card reveal" data-cat="app" onclick="openProjectModal('p2')"><div class="p-bg bg-2"><img src="https://loremflickr.com/500/400/fitness,app" alt="FitTrail fitness tracker app"></div><a class="p-access" onclick="event.stopPropagation(); openProjectModal('p2')" aria-label="View project">↗</a><div class="p-overlay"><div class="p-tag">Mobile App</div><div class="p-title">FitTrail — Fitness Tracker</div></div></div>
+      <div class="p-card reveal" data-cat="brand" onclick="openProjectModal('p3')"><div class="p-bg bg-3"><img src="https://loremflickr.com/500/400/coffee,branding" alt="Kōan Coffee brand identity"></div><a class="p-access" onclick="event.stopPropagation(); openProjectModal('p3')" aria-label="View project">↗</a><div class="p-overlay"><div class="p-tag">Branding</div><div class="p-title">Kōan Coffee — Identity</div></div></div>
+      <div class="p-card reveal" data-cat="video" onclick="openProjectModal('p4')"><div class="p-bg bg-4"><img src="https://loremflickr.com/500/400/architecture,house" alt="Nordic Homes brand film"></div><a class="p-access" onclick="event.stopPropagation(); openProjectModal('p4')" aria-label="View project">↗</a><div class="p-overlay"><div class="p-tag">Videography</div><div class="p-title">Nordic Homes — Brand Film</div></div></div>
+      <div class="p-card reveal" data-cat="web" onclick="openProjectModal('p5')"><div class="p-bg bg-5"><img src="https://loremflickr.com/500/400/lawfirm,office" alt="Vantage Legal corporate site"></div><a class="p-access" onclick="event.stopPropagation(); openProjectModal('p5')" aria-label="View project">↗</a><div class="p-overlay"><div class="p-tag">Website</div><div class="p-title">Vantage Legal — Corporate Site</div></div></div>
+      <div class="p-card reveal" data-cat="app" onclick="openProjectModal('p6')"><div class="p-bg bg-6"><img src="https://loremflickr.com/500/400/delivery,parcel" alt="CartHop delivery app"></div><a class="p-access" onclick="event.stopPropagation(); openProjectModal('p6')" aria-label="View project">↗</a><div class="p-overlay"><div class="p-tag">Mobile App</div><div class="p-title">CartHop — Delivery App</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT DETAIL MODAL -->
+<div class="modal-overlay" id="projectModal" onclick="if(event.target===this) closeProjectModal()">
+  <div class="modal-box">
+    <button class="modal-close" aria-label="Close" onclick="closeProjectModal()">✕</button>
+    <div class="service-num" id="pModalTag">Website</div>
+    <h3 id="pModalTitle">Project Title</h3>
+    <p class="modal-desc" id="pModalDesc"></p>
+    <ul class="modal-list" id="pModalList"></ul>
+    <div class="modal-actions">
+      <a href="#contact" class="btn btn-primary" onclick="closeProjectModal(); return openEnquiryModal(event)">Start a project like this →</a>
+      <button class="btn btn-outline" onclick="closeProjectModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ENQUIRY POPUP MODAL -->
+<div class="modal-overlay" id="enquiryModal" onclick="if(event.target===this) closeEnquiryModal()">
+  <div class="modal-box enquiry-box">
+    <button class="modal-close" aria-label="Close" onclick="closeEnquiryModal()">✕</button>
+    <div class="eyebrow" style="opacity:1;">Get In Touch</div>
+    <h3>Send us your enquiry</h3>
+    <p class="enquiry-sub">Fill this in and our team will get back to you within one business day.</p>
+    <form id="enquiryForm" onsubmit="return submitEnquiryForm(event)">
+      <div class="form-row">
+        <input type="text" placeholder="Full name" required>
+        <input type="email" placeholder="Email address" required>
+      </div>
+      <div class="form-row">
+        <input type="tel" placeholder="Phone number">
+        <select required id="enquiryServiceSelect">
+          <option value="">Service interested in</option>
+          <option>Website Development</option>
+          <option>Mobile App Development</option>
+          <option>Software Development</option>
+          <option>Digital Marketing</option>
+          <option>Graphic Design</option>
+          <option>Videography</option>
+          <option>Starter Package</option>
+          <option>Growth Package</option>
+          <option>Enterprise Package</option>
+        </select>
+      </div>
+      <textarea placeholder="Tell us about your project..." required></textarea>
+      <button type="submit" class="btn btn-primary" style="justify-self:start;">Send Enquiry →</button>
+      <div class="form-success" id="enquirySuccess">✓ Thanks! Your enquiry has been sent — we'll be in touch shortly.</div>
+    </form>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a class="whatsapp-float" href="https://wa.me/910000000000?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20your%20services." target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.65 4.53 1.78 6.4L4 29l7.79-1.74A11.93 11.93 0 0 0 16.004 27C22.63 27 28 21.63 28 15S22.63 3 16.004 3Zm0 21.6a9.55 9.55 0 0 1-4.87-1.33l-.35-.21-4.62 1.03 1-4.5-.23-.36A9.55 9.55 0 1 1 25.55 15a9.56 9.56 0 0 1-9.546 9.6Zm5.24-7.15c-.29-.14-1.7-.84-1.96-.93-.26-.1-.45-.14-.64.14-.19.29-.74.93-.9 1.12-.17.19-.33.21-.62.07-.29-.14-1.22-.45-2.33-1.44-.86-.77-1.44-1.71-1.61-2-.17-.29-.02-.45.13-.6.13-.13.29-.33.43-.5.15-.17.19-.29.29-.48.1-.19.05-.36-.02-.5-.07-.14-.64-1.55-.88-2.12-.23-.56-.47-.48-.64-.49h-.55c-.19 0-.5.07-.76.36-.26.29-1 1-1 2.42 0 1.43 1.03 2.81 1.17 3 .14.19 2.02 3.08 4.9 4.32.68.3 1.22.47 1.63.6.68.22 1.31.19 1.8.11.55-.08 1.7-.7 1.94-1.37.24-.67.24-1.24.17-1.37-.07-.12-.26-.19-.55-.33Z"/>
+  </svg>
+</a>
+
+<script>
+  function openEnquiryModal(evt, service){
+    if(evt) evt.preventDefault();
+    const modal = document.getElementById('enquiryModal');
+    const select = document.getElementById('enquiryServiceSelect');
+    const success = document.getElementById('enquirySuccess');
+    if(success) success.classList.remove('show');
+    if(select && service){ select.value = service; }
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    return false;
+  }
+  function closeEnquiryModal(){
+    document.getElementById('enquiryModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function submitEnquiryForm(evt){
+    evt.preventDefault();
+    const form = document.getElementById('enquiryForm');
+    document.getElementById('enquirySuccess').classList.add('show');
+    setTimeout(()=>{
+      form.reset();
+      closeEnquiryModal();
+    }, 1600);
+    return false;
+  }
+</script>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Client Voices</div>
+      <h2>Don't take our word for it.</h2>
+      <p>Real feedback from teams we've built with.</p>
+    </div>
+    <div class="test-track">
+      <div class="test-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"MEG WORLD rebuilt our entire online store in three weeks. Sales went up 40% the first month after launch."</p>
+        <div class="test-person"><div class="avatar">RA</div><div><strong>Riya Agarwal</strong><span>Founder, Aurelio Fashion</span></div></div>
+      </div>
+      <div class="test-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"The app they built for us finally feels premium. Onboarding, design, backend — all handled by one team."</p>
+        <div class="test-person"><div class="avatar">DK</div><div><strong>David Kim</strong><span>CEO, FitTrail</span></div></div>
+      </div>
+      <div class="test-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Our brand film alone brought in more leads than a year of ads. Genuinely impressed with the turnaround."</p>
+        <div class="test-person"><div class="avatar">SN</div><div><strong>Sara Nair</strong><span>Marketing Head, Nordic Homes</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Insights</div>
+      <h2>From the MEG WORLD blog.</h2>
+      <p>Notes on design, development, and growth — written by our team.</p>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card reveal">
+        <div class="blog-thumb bg-1">🌐</div>
+        <div class="blog-body">
+          <div class="blog-date">June 2026</div>
+          <h3>5 signs your website is costing you customers</h3>
+          <p>Slow load times and dated design quietly push visitors away. Here's what to check first.</p>
+          <a href="#" class="blog-link">Read more →</a>
+        </div>
+      </div>
+      <div class="blog-card reveal">
+        <div class="blog-thumb bg-3">📱</div>
+        <div class="blog-body">
+          <div class="blog-date">May 2026</div>
+          <h3>Native vs cross-platform: choosing the right app stack</h3>
+          <p>A practical breakdown of when to build native and when Flutter or React Native wins.</p>
+          <a href="#" class="blog-link">Read more →</a>
+        </div>
+      </div>
+      <div class="blog-card reveal">
+        <div class="blog-thumb bg-5">📈</div>
+        <div class="blog-body">
+          <div class="blog-date">April 2026</div>
+          <h3>Why brand consistency drives more leads than ad spend</h3>
+          <p>How a unified visual identity compounds the return on every marketing channel.</p>
+          <a href="#" class="blog-link">Read more →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-left:auto; margin-right:auto; text-align:center;">
+      <div class="eyebrow" style="justify-content:center;">FAQ</div>
+      <h2>Questions, answered.</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item open">
+        <div class="faq-q"><span>How long does a typical website project take?</span><span class="plus">+</span></div>
+        <div class="faq-a">Most websites take 2–4 weeks depending on scope. E-commerce and custom platforms can take 4–8 weeks. We'll give you an exact timeline after our first call.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Do you offer support after launch?</span><span class="plus">+</span></div>
+        <div class="faq-a">Yes — every package includes a support window, and we offer ongoing maintenance plans for hosting, updates, and feature additions.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Can you handle both the app and its marketing?</span><span class="plus">+</span></div>
+        <div class="faq-a">Absolutely. That's the whole point of MEG WORLD — one team across development, design, and marketing so nothing gets lost in handoff.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>What's your payment structure?</span><span class="plus">+</span></div>
+        <div class="faq-a">Typically 40% upfront, 40% at midpoint, and 20% on delivery. Custom structures are available for larger enterprise engagements.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Do you work with international clients?</span><span class="plus">+</span></div>
+        <div class="faq-a">Yes, we currently serve clients across 12 countries and work across time zones with async updates and scheduled calls.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Get In Touch</div>
+      <h2>Let's build your next big thing.</h2>
+      <p>Tell us about your project and we'll get back to you within one business day.</p>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-info-card">
+        <div class="row"><div class="ic">📍</div><div><strong>Studio Address</strong><span>4th Floor, Nexus Towers, Chennai, Tamil Nadu, India</span></div></div>
+        <div class="row"><div class="ic">✉️</div><div><strong>Email</strong><span>hello@megworld.com</span></div></div>
+        <div class="row"><div class="ic">📞</div><div><strong>Phone</strong><span>+91 00000 00000</span></div></div>
+        <div class="row"><div class="ic">✉️</div><div><strong>Enquire Now</strong><span>Tell us about your project and we'll get back to you.</span></div></div>
+        <a href="#contact" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:10px;" onclick="return openEnquiryModal(event)">Enquire Now</a>
+      </div>
+      <form onsubmit="event.preventDefault(); alert('Thanks! Your enquiry has been noted. We will reach out shortly.'); this.reset();">
+        <div class="form-row">
+          <input type="text" placeholder="Full name" required>
+          <input type="email" placeholder="Email address" required>
+        </div>
+        <div class="form-row">
+          <input type="tel" placeholder="Phone number">
+          <select required id="serviceSelect">
+            <option value="">Service interested in</option>
+            <option>Website Development</option>
+            <option>Mobile App Development</option>
+            <option>Software Development</option>
+            <option>Digital Marketing</option>
+            <option>Graphic Design</option>
+            <option>Videography</option>
+          </select>
+        </div>
+        <textarea placeholder="Tell us about your project..." required></textarea>
+        <button type="submit" class="btn btn-primary" style="justify-self:start;">Send Enquiry →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#home" class="logo"><span class="dot"></span>MEG<span style="color:var(--lime)">WORLD</span></a>
+        <p style="color:var(--muted); font-size:0.9rem; margin-top:16px; max-width:280px; line-height:1.7;">A full-stack digital studio building websites, apps, software, and brands for companies going global.</p>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul><li><a href="#about">About Us</a></li><li><a href="#services">Services</a></li><li><a href="#portfolio">Portfolio</a></li><li><a href="#blog">Blog</a></li></ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul><li><a href="#services">Website Development</a></li><li><a href="#services">Mobile Apps</a></li><li><a href="#services">Software</a></li><li><a href="#services">Digital Marketing</a></li></ul>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <ul><li><a href="#contact">Contact Us</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Enquire Now</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MEG WORLD. All rights reserved.</span>
+      <span>Made with ambition, worldwide.</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // mobile nav
+  const burger = document.getElementById('burger');
+  const mobileNav = document.getElementById('mobileNav');
+  const mnavClose = document.getElementById('mnavClose');
+  burger.addEventListener('click', ()=> mobileNav.classList.add('open'));
+  mnavClose.addEventListener('click', ()=> mobileNav.classList.remove('open'));
+
+  // services dropdown
+  const servicesNavItem = document.getElementById('servicesNavItem');
+  const servicesNavLink = document.getElementById('servicesNavLink');
+  servicesNavLink.addEventListener('click', (e)=>{
+    e.preventDefault();
+    servicesNavItem.classList.toggle('open');
+  });
+  document.addEventListener('click', (e)=>{
+    if(!servicesNavItem.contains(e.target)) servicesNavItem.classList.remove('open');
+  });
+  document.getElementById('servicesDropdown').querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=> servicesNavItem.classList.remove('open'));
+  });
+  mobileNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileNav.classList.remove('open')));
+
+  // service detail modal
+  const serviceData = {
+    web: {
+      num: '01 / Build', icon: '🌐', title: 'Website Development',
+      desc: 'Fast, responsive, SEO-ready websites — from landing pages to full e-commerce platforms — built on modern frameworks.',
+      list: ['Custom design, no templates', 'Mobile-first & SEO optimized', 'E-commerce & CMS integration', 'Performance & speed tuning'],
+      option: 'Website Development'
+    },
+    mobile: {
+      num: '02 / Build', icon: '📱', title: 'Mobile App Development',
+      desc: 'Native and cross-platform iOS & Android apps designed for smooth performance and real user retention.',
+      list: ['iOS, Android & cross-platform builds', 'Intuitive UX/UI design', 'API & backend integration', 'App Store & Play Store launch support'],
+      option: 'Mobile App Development'
+    },
+    software: {
+      num: '03 / Build', icon: '🖥️', title: 'Software Development',
+      desc: 'Custom software, internal tools, and SaaS products engineered to solve your exact business problem.',
+      list: ['Custom SaaS & internal tools', 'Scalable cloud architecture', 'Third-party integrations', 'Ongoing maintenance & support'],
+      option: 'Software Development'
+    },
+    marketing: {
+      num: '04 / Grow', icon: '📈', title: 'Digital Marketing',
+      desc: 'SEO, paid media, and content strategy that turns traffic into pipeline and pipeline into revenue.',
+      list: ['SEO & content strategy', 'Paid media (Google, Meta, LinkedIn)', 'Analytics & conversion tracking', 'Monthly performance reporting'],
+      option: 'Digital Marketing'
+    },
+    design: {
+      num: '05 / Brand', icon: '🎨', title: 'Graphic Design',
+      desc: 'Logos, brand systems, and visual identities that make your business instantly recognizable.',
+      list: ['Logo & brand identity design', 'Style guides & brand systems', 'Marketing & social creatives', 'Print & packaging design'],
+      option: 'Graphic Design'
+    },
+    video: {
+      num: '06 / Brand', icon: '🎬', title: 'Videography',
+      desc: 'Product films, brand stories, and social-ready video content shot, edited, and delivered end to end.',
+      list: ['Product & brand films', 'Social-ready short-form video', 'Professional shooting & editing', 'Motion graphics & sound design'],
+      option: 'Videography'
+    }
+  };
+  const serviceModal = document.getElementById('serviceModal');
+  function openServiceModal(key){
+    const d = serviceData[key];
+    if(!d) return;
+    document.getElementById('modalIcon').textContent = d.icon;
+    document.getElementById('modalNum').textContent = d.num;
+    document.getElementById('modalTitle').textContent = d.title;
+    document.getElementById('modalDesc').textContent = d.desc;
+    document.getElementById('modalList').innerHTML = d.list.map(item => `<li>${item}</li>`).join('');
+    document.getElementById('modalEnquire').setAttribute('data-service', d.option);
+    serviceModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeServiceModal(){
+    serviceModal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ closeServiceModal(); closeProjectModal(); closeEnquiryModal(); } });
+
+  // project detail modal
+  const projectData = {
+    p1: { tag:'Website', title:'Aurelio Fashion — E-commerce', desc:'A full-stack e-commerce rebuild for a fashion label expanding into three new markets, with custom checkout, sizing tools, and a headless CMS for their editorial team.', list:['Headless commerce build','Custom sizing & fit tool','Multi-currency checkout','40% faster page loads'] },
+    p2: { tag:'Mobile App', title:'FitTrail — Fitness Tracker', desc:'A cross-platform fitness app that turns outdoor runs and rides into shareable routes, with live coaching cues and social leaderboards.', list:['iOS & Android launch','Live GPS route tracking','Social leaderboards','4.8★ store rating'] },
+    p3: { tag:'Branding', title:'Kōan Coffee — Identity', desc:'A full identity system for a specialty coffee roaster, from logo and packaging to café signage and social templates.', list:['Logo & visual identity','Packaging design','Café signage system','Social content templates'] },
+    p4: { tag:'Videography', title:'Nordic Homes — Brand Film', desc:'A brand film for a Scandinavian home-goods company, shot across three studios to capture their design philosophy for a global audience.', list:['Concept & scripting','On-location shoot','Colour grading & sound design','Cut for web & social'] },
+    p5: { tag:'Website', title:'Vantage Legal — Corporate Site', desc:'A corporate site rebuild for a legal practice, focused on credibility, fast case-area navigation, and lead capture for new enquiries.', list:['Custom CMS build','Practice-area navigation','Lead capture forms','Full accessibility pass'] },
+    p6: { tag:'Mobile App', title:'CartHop — Delivery App', desc:'An on-demand delivery app connecting local stores with customers, built with live order tracking and a merchant dashboard.', list:['Customer & merchant apps','Live order tracking','Payments integration','Launched in 6 cities'] }
+  };
+  const projectModal = document.getElementById('projectModal');
+  function openProjectModal(key){
+    const d = projectData[key];
+    if(!d) return;
+    document.getElementById('pModalTag').textContent = d.tag;
+    document.getElementById('pModalTitle').textContent = d.title;
+    document.getElementById('pModalDesc').textContent = d.desc;
+    document.getElementById('pModalList').innerHTML = d.list.map(item => `<li>${item}</li>`).join('');
+    projectModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeProjectModal(){
+    projectModal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.service-card[role="button"]').forEach(card=>{
+    card.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); card.click(); }
+    });
+  });
+  document.getElementById('modalEnquire').addEventListener('click', function(){
+    const service = this.getAttribute('data-service');
+    const select = document.getElementById('serviceSelect');
+    if(select && service){ select.value = service; }
+  });
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.12});
+  revealEls.forEach(el=> io.observe(el));
+
+  // faq accordion
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.addEventListener('click', ()=>{
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=> i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+
+  // portfolio filter
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const pCards = document.querySelectorAll('.p-card');
+  tabBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabBtns.forEach(b=> b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      pCards.forEach(card=>{
+        if(filter==='all' || card.dataset.cat===filter){ card.style.display='block'; }
+        else{ card.style.display='none'; }
+      });
+    });
+  });
+
+  // header shrink on scroll
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 40){ header.style.boxShadow = '0 8px 30px rgba(0,0,0,0.35)'; }
+    else{ header.style.boxShadow = 'none'; }
+  });
+</script>
+
+</body>
+</html>
